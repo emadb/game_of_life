@@ -6,22 +6,33 @@ defmodule Golex.Cell do
   end
 
   def init([coord]) do
-    IO.inspect coord, label: "I"
-    {:ok, coord}
+    {:ok, %{coord: coord, gen: 0, next_state: :none}}
   end
 
-  def tick(coord) do
-    GenServer.call(via_tuple(coord), :tick)
+  def define_next_gen(coord) do
+    GenServer.call(via_tuple(coord), :define_next_gen)
+    coord
   end
 
-  def handle_call(:tick, _from, state) do
+  def apply(coord) do
+    GenServer.call(via_tuple(coord), :apply)
+    coord
+  end
 
-    if count_neighbours(state) == 2 || count_neighbours(state) == 3 do
-      {:reply, :ok, state}
+  def handle_call(:define_next_gen, _from, %{coord: coord, gen: gen, next_state: :none}) do
+    if count_neighbours(coord) == 2 || count_neighbours(coord) == 3 do
+      {:reply, coord, %{coord: coord, gen: gen, next_state: :live}}
     else
-      IO.inspect state, label: "D"
-      {:stop, :shutdown, :ok, state}
+      {:reply, coord, %{coord: coord, gen: gen, next_state: :dead}}
     end
+  end
+
+  def handle_call(:apply, _from, %{coord: coord, gen: gen, next_state: :dead}) do
+    {:stop, :shutdown, coord, %{coord: coord, gen: gen}}
+  end
+
+  def handle_call(:apply, _from, %{coord: coord, gen: gen, next_state: :live}) do
+    {:reply, coord, %{coord: coord, gen: gen + 1, next_state: :none}}
   end
 
   def count_neighbours({x, y}) do

@@ -92,4 +92,12 @@ defmodule GolexTest do
       assert [{_, nil}] = Horde.Registry.lookup(Golex.CellRegistry, {4, 4})
     end
   end
+
+  describe "God" do
+    test "fake" do
+      res = Golex.God.fake([{2, 3}, {3, 2}, {3, 3}, {1, 2}, {3, 1}])
+      IO.inspect res
+    end
+
+  end
 end
