@@ -105,13 +105,13 @@ defmodule GolexTest do
 
   describe "Any live cell with two or three live neighbours lives on to the next generation." do
     test "2 neighbours (next)" do
-      {:ok, pid} = start_supervised({Golex.Cell, [{2, 2}]})
-      start_supervised({Golex.Cell, [{1, 2}]})
-      start_supervised({Golex.Cell, [{3, 2}]})
+      # {:ok, pid} = start_supervised({Golex.Cell, [{2, 2}]})
+      # start_supervised({Golex.Cell, [{1, 2}]})
+      # start_supervised({Golex.Cell, [{3, 2}]})
 
-      # {:ok, _} = Golex.Cell.start_link([{2, 2}])
-      # Golex.Cell.start_link([{1, 2}])
-      # Golex.Cell.start_link([{3, 2}])
+      {:ok, _} = Golex.Cell.start_link([{2, 2}])
+      Golex.Cell.start_link([{1, 2}])
+      Golex.Cell.start_link([{3, 2}])
 
       %{next_state: next_state} = Golex.Cell.define_next_gen({2, 2})
 
