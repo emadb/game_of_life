@@ -6,6 +6,7 @@ defmodule Golex.Cell do
   end
 
   def init([coord]) do
+    IO.inspect(coord, label: "I>")
     {:ok, %{coord: coord, gen: 0, next_state: :none}}
   end
 
@@ -25,11 +26,23 @@ defmodule Golex.Cell do
     end
   end
 
-  def handle_call(:apply, _from, %{next_state: :dead} = state), do: {:stop, :shutdown, state, state}
-  def handle_call(:apply, _from, %{next_state: :live} = state), do: {:reply, state, %{state | gen: state.gen + 1, next_state: :none}}
+  def handle_call(:apply, _from, %{next_state: :dead} = state),
+    do: {:stop, :shutdown, state, state}
+
+  def handle_call(:apply, _from, %{next_state: :live} = state),
+    do: {:reply, state, %{state | gen: state.gen + 1, next_state: :none}}
 
   def count_neighbours({x, y}) do
-    [ {x-1, y}, {x+1, y}, {x-1, y-1}, {x-1, y+1}, {x+1, y-1}, {x+1, y+1}, {x, y-1}, {x, y+1}]
+    [
+      {x - 1, y},
+      {x + 1, y},
+      {x - 1, y - 1},
+      {x - 1, y + 1},
+      {x + 1, y - 1},
+      {x + 1, y + 1},
+      {x, y - 1},
+      {x, y + 1}
+    ]
     |> Enum.reduce(0, fn coord, acc ->
       case Horde.Registry.lookup(Golex.CellRegistry, coord) do
         [{_pid, _}] -> acc + 1

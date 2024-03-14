@@ -13,7 +13,7 @@ defmodule Utils do
   def multi_tick(n) do
     Enum.each(1..n, fn _ ->
       tick()
-      Process.sleep(100)
+      Process.sleep(5)
     end)
   end
 
@@ -23,11 +23,17 @@ defmodule Utils do
 
   def tick() do
     cell_list = Horde.Registry.select(Golex.CellRegistry, [{{:"$1", :_, :_}, [], [:"$1"]}])
-    Enum.map(cell_list, &Golex.Cell.define_next_gen/1)
-
+    Task.await_many(
+      Enum.map(cell_list, fn c ->
+        Task.async(Golex.Cell, :define_next_gen, [c])
+      end)
+    )
     Golex.God.give_life()
-
-    Enum.map(cell_list, &Golex.Cell.apply/1)
+    Task.await_many(
+      Enum.map(cell_list, fn c ->
+        Task.async(Golex.Cell, :apply, [c])
+      end)
+    )
   end
 
   def count do
