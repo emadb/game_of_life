@@ -6,7 +6,6 @@ defmodule Golex.Cell do
   end
 
   def init([coord]) do
-    IO.inspect(coord, label: "I>")
     {:ok, %{coord: coord, gen: 0, next_state: :none}}
   end
 
