@@ -1,10 +1,6 @@
 defmodule Golex.LocalNodeDistribution do
   @behaviour Horde.DistributionStrategy
 
-  @moduledoc """
-  Distributes processes to nodes uniformly using a hash ring
-  """
-
   def choose_node(_identifier, _members) do
     {:ok,
      %Horde.DynamicSupervisor.Member{
