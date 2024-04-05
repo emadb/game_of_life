@@ -7,7 +7,6 @@ defmodule Utils do
     |> Enum.map(fn _ -> {Enum.random(1..@max_x), Enum.random(1..@max_y)} end)
     |> Enum.uniq()
     |> Enum.map(fn coord -> Golex.HordeSupervisor.start_cell([coord]) end)
-
   end
 
   def multi_tick(n) do
@@ -23,12 +22,15 @@ defmodule Utils do
 
   def tick() do
     cell_list = Horde.Registry.select(Golex.CellRegistry, [{{:"$1", :_, :_}, [], [:"$1"]}])
+
     Task.await_many(
       Enum.map(cell_list, fn c ->
         Task.async(Golex.Cell, :define_next_gen, [c])
       end)
     )
+
     Golex.God.give_life()
+
     Task.await_many(
       Enum.map(cell_list, fn c ->
         Task.async(Golex.Cell, :apply, [c])
@@ -43,7 +45,6 @@ defmodule Utils do
   def get_list do
     Horde.Registry.select(Golex.CellRegistry, [{{:"$1", :_, :_}, [], [:"$1"]}])
   end
-
 
   def create_block() do
     Golex.HordeSupervisor.start_cell([{1, 2}])
@@ -62,5 +63,4 @@ defmodule Utils do
 
     Printer.print_cells(get_list())
   end
-
 end

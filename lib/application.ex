@@ -8,12 +8,13 @@ defmodule Golex.Application do
         strategy: Cluster.Strategy.Gossip
       ]
     ]
+
     children = [
       {Cluster.Supervisor, [topologies, [name: Golex.ClusterSupervisor]]},
       {Horde.Registry, [members: :auto, keys: :unique, name: Golex.CellRegistry]},
       Golex.HordeRegistry,
       Golex.HordeSupervisor,
-      Golex.NodeObserver,
+      Golex.NodeObserver
     ]
 
     opts = [strategy: :one_for_one, name: Golex.Supervisor]

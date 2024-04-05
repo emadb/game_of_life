@@ -5,9 +5,10 @@ defmodule Printer do
 
     matrix = for _y <- 1..max_y, _x <- 1..max_x, do: "."
 
-    filled_matrix = Enum.reduce(list, matrix, fn {x, y}, acc ->
-      list_replace_at(acc, (x - 1) * max_y + y - 1, "#")
-    end)
+    filled_matrix =
+      Enum.reduce(list, matrix, fn {x, y}, acc ->
+        list_replace_at(acc, (x - 1) * max_y + y - 1, "#")
+      end)
 
     filled_matrix
     |> Enum.chunk_every(max_y)

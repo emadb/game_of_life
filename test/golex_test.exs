@@ -89,6 +89,7 @@ defmodule GolexTest do
 
       assert next_state == :dead
     end
+
     test "5 neighbours (apply)" do
       {:ok, pid} = start_supervised({Golex.Cell, [{2, 2}]})
       start_supervised({Golex.Cell, [{1, 2}]})
@@ -115,8 +116,7 @@ defmodule GolexTest do
 
       %{next_state: next_state} = Golex.Cell.define_next_gen({2, 2})
 
-
-      assert next_state == :live
+      assert next_state == :alive
     end
 
     test "2 neighbours (apply)" do
@@ -124,7 +124,7 @@ defmodule GolexTest do
       # start_supervised({Golex.Cell, [{1, 2}]})
       # start_supervised({Golex.Cell, [{3, 2}]})
 
-      {:ok,pid} = Golex.Cell.start_link([{2, 2}])
+      {:ok, pid} = Golex.Cell.start_link([{2, 2}])
       Golex.Cell.start_link([{1, 2}])
       Golex.Cell.start_link([{3, 2}])
 
@@ -146,16 +146,15 @@ defmodule GolexTest do
 
       %{next_state: next_state} = Golex.Cell.define_next_gen({4, 4})
 
-      assert next_state == :live
+      assert next_state == :alive
     end
-
 
     test "3 neighbours (apply)" do
       # {:ok, pid} = start_supervised({Golex.Cell, [{2, 2}]})
       # start_supervised({Golex.Cell, [{1, 2}]})
       # start_supervised({Golex.Cell, [{3, 2}]})
 
-      {:ok,pid} = Golex.Cell.start_link([{4, 4}])
+      {:ok, pid} = Golex.Cell.start_link([{4, 4}])
       Golex.Cell.start_link([{3, 4}])
       Golex.Cell.start_link([{5, 4}])
       Golex.Cell.start_link([{5, 5}])
@@ -178,5 +177,4 @@ defmodule GolexTest do
       assert [{_, nil}] = Horde.Registry.lookup(Golex.CellRegistry, {11, 11})
     end
   end
-
 end

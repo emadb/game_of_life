@@ -3,6 +3,7 @@ defmodule Golex.HordeSupervisor do
 
   def start_link(_) do
     Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one], name: __MODULE__)
+
     # Horde.DynamicSupervisor.start_link(__MODULE__, [strategy: :one_for_one, distribution_strategy: Golex.LocalNodeDistribution], name: __MODULE__)
   end
 
@@ -23,5 +24,4 @@ defmodule Golex.HordeSupervisor do
   def start_cell(coord) do
     start_child({Golex.Cell, coord})
   end
-
 end

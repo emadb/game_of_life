@@ -19,7 +19,7 @@ defmodule Golex.Cell do
 
   def handle_call(:define_next_gen, _from, %{coord: coord, next_state: :none} = state) do
     if count_neighbours(coord) == 2 || count_neighbours(coord) == 3 do
-      {:reply, %{state | next_state: :live}, %{state | next_state: :live}}
+      {:reply, %{state | next_state: :alive}, %{state | next_state: :alive}}
     else
       {:reply, %{state | next_state: :dead}, %{state | next_state: :dead}}
     end
@@ -28,7 +28,7 @@ defmodule Golex.Cell do
   def handle_call(:apply, _from, %{next_state: :dead} = state),
     do: {:stop, :shutdown, state, state}
 
-  def handle_call(:apply, _from, %{next_state: :live} = state),
+  def handle_call(:apply, _from, %{next_state: :alive} = state),
     do: {:reply, state, %{state | gen: state.gen + 1, next_state: :none}}
 
   def count_neighbours({x, y}) do
