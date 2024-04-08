@@ -13,9 +13,6 @@ defmodule GolexTest do
   describe "Any live cell with two or three live neighbours lives on to the next generation." do
   end
 
-  describe "Any live cell with two or three live neighbours lives on to the next generation." do
-  end
-
   describe "Any dead cell with exactly three live neighbours becomes a live cell." do
   end
 end
